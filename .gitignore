@@ -1,0 +1,41 @@
+# Ambiente e credenciais locais
+.env
+.env.*
+!.env.example
+*.local
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.json
+
+# Java/Maven
+target/
+*.class
+
+# Node/frontend
+node_modules/
+dist/
+coverage/
+.vite/
+playwright-report/
+test-results/
+
+# IDEs e sistema operacional
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Dados e arquivos de execução locais
+/data/
+/storage/
+/uploads/
+/backups/
+/logs/
+*.log
+*.dump
+
+# Versionar fontes, migrações, Maven Wrapper e lockfiles.
+# Não ignorar todos os .sql: as migrações precisam entrar no Git.
