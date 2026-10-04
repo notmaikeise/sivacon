@@ -1,0 +1,45 @@
+# Modelo conceitual de dados
+
+**Estado:** proposta. Este documento não é um esquema SQL nem um conjunto de entidades já implementadas. Elaborar e aprovar o modelo lógico em SV05.
+
+## Núcleo conceitual
+
+```mermaid
+erDiagram
+    direction TB
+    COMPRADOR ||--o{ PROPOSTA : recebe
+    UNIDADE ||--o{ PROPOSTA : participa
+    PROPOSTA ||--o| VENDA : origina
+    VENDA ||--o{ PARCELA_SIMULADA : registra
+```
+
+Cada proposta tem exatamente um comprador e uma unidade. Um comprador e uma unidade podem participar de várias propostas ao longo do tempo. Uma proposta pode gerar uma venda. A unicidade de venda ativa por unidade é uma regra adicional de integridade, não demonstrada apenas pela cardinalidade.
+
+## Entidades e relações propostas
+
+| Entidade | Relação / conteúdo |
+| --- | --- |
+| ModeloVeiculo | Um modelo para várias unidades; marca, nome, motorização e categoria. |
+| UnidadeVeiculo | Um modelo; chassi, preço, condição, estado e fotos. |
+| Comprador | Cadastro e contato; pode existir sem conta de acesso. |
+| ContaUsuario / Perfil | Permissões; vínculo com comprador quando aplicável. |
+| Atendimento / Interacao | Comprador, oportunidade, responsável, autor, data e histórico. |
+| Proposta / Versao | Comprador, unidade, valores preservados, validade e condições. |
+| Simulacao / Aprovacao | Parâmetros, resultados e decisões com autoria. |
+| Venda | Fechamento fictício, proposta e consistência com estoque. |
+| ParcelaSimulada | Vencimento, valor e vínculo ao cronograma. |
+| Configuracao / Auditoria | Identidade, políticas versionadas e ações relevantes. |
+
+## Pontos do modelo lógico
+
+- Definir chaves, campos obrigatórios, índices, unicidade e limites de tamanho.
+- Definir como proposta, versão e cronograma de simulação serão persistidos. A ligação conceitual de parcelas à venda não impede simular parcelas antes dela.
+- Usar `BigDecimal` no Java e tipos decimais no banco para dinheiro; fixar escala e arredondamento.
+- Preservar preço e políticas aplicados na proposta. Alterar catálogo não reescreve histórico.
+- Definir o conjunto de estados da unidade e da proposta antes de mapear transições.
+- Garantir RN01, RN02 e RN03 também por integridade no banco, conforme o modelo aprovado.
+- Definir concorrência e transação do fechamento; não confiar apenas em “consultar disponível” antes de gravar.
+
+## Entregas de SV05
+
+Diagrama editável, dicionário de dados, relacionamentos, regras de integridade e decisões de transação. Depois, SV09 versiona as migrações. Não inserir regras de reserva, cancelamento ou múltiplos itens sem revisão de escopo.
