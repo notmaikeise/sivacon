@@ -1,6 +1,7 @@
 # API e integração
 
-**Estado:** roteiro do contrato, sem endpoints implementados. Produzir o contrato concreto em SV08.
+**Estado:** contrato incremental. O primeiro endpoint público de catálogo está
+implementado; as demais famílias continuam sendo adicionadas por fatias.
 
 ## Famílias previstas
 
@@ -16,6 +17,33 @@
 | Administração | Usuários, perfis, configuração e resumo. | RF10 |
 
 Nomes de rotas e payloads serão definidos no contrato aprovado. A listagem acima não deve ser copiada como se fosse uma API pronta.
+
+## Primeiro contrato implementado
+
+`GET /api/v1/catalog?brand={marca}&maxPrice={valor}`
+
+Retorna unidades publicadas e disponíveis, ordenadas por marca, modelo e preço.
+Os filtros são opcionais. A resposta é uma lista de objetos com `id`, `brand`,
+`name`, `price`, `condition`, `status` e `description`. O detalhe público usa
+`GET /api/v1/catalog/{id}` e retorna `404` quando a unidade não existe ou não
+está publicada.
+
+`POST /api/v1/interests` registra um comprador, uma oportunidade no estágio
+`NEW` e a primeira interação do formulário em uma única transação. O payload
+exige `vehicleId`, `name`, `email` e `message`, com `phone` opcional. A API
+retorna `409` quando a unidade não está publicada ou disponível.
+
+## Estoque (checkpoint E2)
+
+- `GET /api/v1/inventory` lista unidades e seus estados para a área interna.
+- `POST /api/v1/inventory` cadastra modelo/unidade como `DRAFT`.
+- `PATCH /api/v1/inventory/{id}/publication` publica ou retira uma unidade do
+  catálogo. A publicação muda o estado para `AVAILABLE`; retirar muda para
+  `DRAFT`.
+
+O endpoint de estoque ainda é uma superfície local de desenvolvimento. A
+autenticação e a matriz de perfis devem ser implementadas antes de expor essa
+rota fora do ambiente de teste.
 
 ## Conteúdo de cada operação
 

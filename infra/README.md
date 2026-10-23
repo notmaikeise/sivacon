@@ -1,7 +1,14 @@
-# Infra
+# Infraestrutura local
 
-Diretório reservado para Configuração e procedimentos da execução local.
+O Compose deste diretório fornece o PostgreSQL persistente e o pgAdmin para
+inspeção gráfica do banco durante o desenvolvimento.
 
-**Situação:** planejamento. Este diretório ainda não contém uma aplicação executável.
+```powershell
+docker compose -f infra/docker-compose.yml up -d
+docker compose -f infra/docker-compose.yml ps
+docker compose -f infra/docker-compose.yml logs -f postgres
+```
 
-O card SV24 orienta sua implementação. Consulte [arquitetura](../docs/06-arquitetura.md) e [operação local](../docs/12-operacao-local.md). Registrar comandos reais aqui quando os arquivos de execução existirem.
+Os dados ficam no volume Docker `sivacon-postgres-data`. Credenciais reais não
+devem ser commitadas; os valores do arquivo Compose são apenas para o ambiente
+local de desenvolvimento.

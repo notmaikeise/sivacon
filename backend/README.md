@@ -19,6 +19,12 @@ Controllers não acessam o banco diretamente. Services coordenam o caso de uso
 e DAOs concentram SQL e mapeamento de resultados. Novos módulos devem seguir o
 mesmo padrão, mantendo seus controllers finos.
 
+Testes unitários dos services:
+
+```powershell
+.\mvnw.cmd test
+```
+
 ## Pré-requisitos
 
 - Java 21
