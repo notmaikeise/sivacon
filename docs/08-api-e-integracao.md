@@ -45,6 +45,14 @@ O endpoint de estoque ainda é uma superfície local de desenvolvimento. A
 autenticação e a matriz de perfis devem ser implementadas antes de expor essa
 rota fora do ambiente de teste.
 
+## Autenticação (checkpoint E2)
+
+`POST /api/v1/auth/login` recebe `email` e `password` e retorna um token de
+sessão com validade de oito horas, além do perfil do usuário. Envie o token em
+`Authorization: Bearer <token>` para acessar o estoque. O catálogo e o registro
+de interesse continuam públicos. O usuário `admin@example.com` com senha
+`password` existe apenas para desenvolvimento local.
+
 ## Conteúdo de cada operação
 
 Método e caminho; finalidade; perfil autorizado; campos e validações; respostas e erros; paginação quando necessária; exemplos fictícios; RF/RN relacionados; propriedade do recurso; efeitos transacionais.
