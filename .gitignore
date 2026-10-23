@@ -12,6 +12,7 @@ credentials.json
 # Java/Maven
 target/
 *.class
+*.tsbuildinfo
 
 # Node/frontend
 node_modules/

@@ -1,6 +1,9 @@
 # Testes e rastreabilidade
 
-**Estado dos cenários: planejado, não executado.** CT01-CT08 preservam a identificação da fonte. CT09 é um complemento proposto neste pacote para detalhar RF10.
+**Estado dos cenários:** CT01 e parte de CT04 possuem implementação inicial no
+checkpoint atual; os demais continuam planejados. CT01-CT08 preservam a
+identificação da fonte. CT09 é um complemento proposto neste pacote para
+detalhar RF10.
 
 ## Cenários de aceitação
 
@@ -15,6 +18,10 @@
 | CT07 | RF06-RF08 / HU05 / RN07, RN12 | Desconto exige aprovação; Pix agendado não confirma pagamento. |
 | CT08 | RF01-RF10 / RNF06 | Jornada local offline após preparo, persistência no reinício, instalação e restauração. |
 | CT09 (novo, proposto) | RF10 / RNF01, RNF03 | Configuração persiste, alterações de usuário/perfil respeitam acesso e resumo coincide com vendas fictícias. |
+
+Os testes unitários dos services cobrem atualmente catálogo, interesse e as
+validações básicas do estoque. Testes HTTP e persistência com PostgreSQL ainda
+serão adicionados junto à autenticação e ao CRUD completo.
 
 ## Do requisito ao card
 
@@ -56,3 +63,15 @@ Uma verificação do mesmo cálculo escrita com a mesma fórmula não é referê
 Para cada cenário, anotar versão/commit, ambiente, dados fictícios, responsável, passos, resultado esperado, resultado observado e evidência. Estados: `Não executado`, `Aprovado`, `Falhou` ou `Bloqueado`.
 
 Todos os estados começam em `Não executado`. O card SV22 reúne CT01-CT07 e CT09; SV24/SV25 cobrem CT08; SV26 consolida qualidade e resultados.
+
+## Evidência do checkpoint atual
+
+| Verificação | Resultado |
+| --- | --- |
+| Build backend com Java 21 | Aprovado |
+| Build frontend com `npm run build` | Aprovado |
+| PostgreSQL e pgAdmin via Compose | Aprovado |
+| Migrações Flyway V1 e V2 | Aprovado |
+| Catálogo sem filtros e com filtros | Aprovado manualmente |
+| Registro de interesse persistido | Aprovado manualmente |
+| Testes unitários de `VehicleCatalogService` e `InterestService` | Implementados; executar no próximo build |

@@ -4,7 +4,9 @@
 
 Projeto acadêmico que conecta uma vitrine de veículos, a área do comprador e um CRM para funcionários. O primeiro cenário será uma concessionária fictícia de motos.
 
-**Situação inicial:** planejamento e modelagem em revisão pela equipe. Este primeiro pacote contém documentação e organização do trabalho; a aplicação ainda será implementada.
+**Situação atual:** fundação executável em implementação incremental. O primeiro
+fluxo já possui PostgreSQL, pgAdmin, migrações Flyway, API de catálogo e uma
+interface React de demonstração.
 
 ## Objetivo
 
@@ -29,7 +31,7 @@ Demonstrar uma jornada integrada: cadastrar uma moto, publicar no catálogo, rec
 
 “Vitrine pública” significa acesso sem autenticação no ambiente local. Acesso externo pela internet depende de novo planejamento.
 
-## Tecnologias propostas
+## Tecnologias
 
 | Finalidade | Proposta |
 | --- | --- |
@@ -41,7 +43,10 @@ Demonstrar uma jornada integrada: cadastrar uma moto, publicar no catálogo, rec
 | Contratos e testes | OpenAPI, JUnit/Mockito, Vitest/Testing Library e Playwright, conforme cada incremento |
 | Colaboração | Git, GitHub Issues, Projects e pull requests |
 
-As versões exatas e a estratégia de autenticação serão registradas na decisão técnica antes do bootstrap. GitHub Actions e benefícios estudantis são apoios opcionais.
+Java 21, Spring Boot 3.4, Maven Wrapper, Flyway 10, PostgreSQL 16,
+React 18, TypeScript, Vite e Docker Compose já estão configurados no
+checkpoint atual. Autenticação, OpenAPI e demais bibliotecas entram nos
+próximos incrementos após validação do contrato.
 
 ## Documentação
 
@@ -61,9 +66,57 @@ Comece pelo [índice dos documentos](docs/README.md).
 
 Cada tarefa deve ter uma issue, uma pessoa responsável e critérios de aceite. As mudanças serão feitas em branches e revisadas por pull request antes de entrar na `main`. Consulte [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Execução
+## Execução local
 
-Os comandos de instalação serão publicados quando backend, frontend e infraestrutura existirem. Hoje, `backend/`, `frontend/` e `infra/` possuem apenas orientações para a implementação.
+1. Inicie o PostgreSQL e o pgAdmin:
+
+   ```powershell
+   docker compose -f infra/docker-compose.yml up -d
+   ```
+
+2. Inicie a API (Java 21):
+
+   ```powershell
+   cd backend
+   .\mvnw.cmd spring-boot:run
+   ```
+
+3. Em outro terminal, inicie a interface:
+
+   ```powershell
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+   Acesse http://localhost:5173. O pgAdmin fica em http://localhost:5050;
+   credenciais e configuração estão em [backend/README.md](backend/README.md).
+
+## Checkpoint atual — 23/10/2026
+
+Base local validada com Java 21, PostgreSQL saudável, pgAdmin acessível,
+migrações Flyway aplicadas e dados fictícios carregados. O backend expõe o
+catálogo público e o registro transacional de interesse; o frontend React
+consome esses endpoints. O build Maven e o build Vite foram executados com
+sucesso. Os módulos de autenticação, CRM, propostas, simulação e venda ainda
+estão pendentes.
+
+## Próximas etapas de desenvolvimento
+
+As entregas seguirão o planejamento em fatias integradas:
+
+1. **E2 — Estoque e acesso:** CRUD de modelos e unidades, publicação,
+   autenticação, perfis e área inicial do comprador.
+2. **E3 — Jornada comercial:** CRM/funil, propostas versionadas, simulação,
+   aprovações e fechamento transacional.
+3. **E4 — Entrega:** testes de jornada, backup/restauração, empacotamento local
+   e manual de instalação.
+4. **E5 — Evoluções:** segunda instalação, busca por regras e funcionalidades
+   adicionais aprovadas.
+
+As regras comerciais marcadas como propostas em
+`docs/04-regras-de-negocio.md` serão parametrizadas após validação da equipe,
+não inventadas no código.
 
 ## Base acadêmica e autoria
 
