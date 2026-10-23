@@ -28,6 +28,8 @@ export function App() {
   const [admin, setAdmin] = useState(false)
   const [inventory, setInventory] = useState<InventoryItem[]>([])
   const [inventoryMessage, setInventoryMessage] = useState('')
+  const [token, setToken] = useState(() => localStorage.getItem('sivacon_token') ?? '')
+  const [loginError, setLoginError] = useState('')
 
   async function loadCatalog(event?: FormEvent) {
     event?.preventDefault()
@@ -49,9 +51,37 @@ export function App() {
 
   useEffect(() => { void loadCatalog() }, [])
 
-  async function loadInventory() {
-    const response = await fetch(`${apiBase}/api/v1/inventory`)
+  async function loadInventory(authToken = token) {
+    const response = await fetch(`${apiBase}/api/v1/inventory`, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    })
     if (response.ok) setInventory(await response.json() as InventoryItem[])
+  }
+
+  async function login(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const form = new FormData(event.currentTarget)
+    const response = await fetch(`${apiBase}/api/v1/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: form.get('email'), password: form.get('password') }),
+    })
+    if (!response.ok) {
+      setLoginError('E-mail ou senha inválidos.')
+      return
+    }
+    const result = await response.json() as { token: string }
+    localStorage.setItem('sivacon_token', result.token)
+    setToken(result.token)
+    setLoginError('')
+    await loadInventory(result.token)
+  }
+
+  function logout() {
+    localStorage.removeItem('sivacon_token')
+    setToken('')
+    setAdmin(false)
+    setInventory([])
   }
 
   async function createInventory(event: FormEvent<HTMLFormElement>) {
@@ -59,7 +89,7 @@ export function App() {
     const form = new FormData(event.currentTarget)
     const response = await fetch(`${apiBase}/api/v1/inventory`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(Object.fromEntries(form.entries())),
     })
     if (!response.ok) {
@@ -74,7 +104,7 @@ export function App() {
   async function togglePublication(item: InventoryItem) {
     await fetch(`${apiBase}/api/v1/inventory/${item.id}/publication`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ published: !item.published }),
     })
     await loadInventory()
@@ -116,8 +146,20 @@ export function App() {
       </header>
       {admin ? (
         <section className="admin-panel">
-          <h2>Estoque</h2>
-          <p className="muted">Cadastro de teste. A autenticação de funcionários será adicionada na próxima etapa.</p>
+          {!token ? (
+            <>
+              <h2>Acesso ao estoque</h2>
+              <form className="login-form" onSubmit={login}>
+                <label>E-mail<input name="email" type="email" required defaultValue="admin@example.com" /></label>
+                <label>Senha<input name="password" type="password" required defaultValue="password" /></label>
+                <button type="submit">Entrar</button>
+              </form>
+              {loginError && <p className="notice error">{loginError}</p>}
+              <p className="muted">Usuário local: admin@example.com / password</p>
+            </>
+          ) : (
+            <>
+          <div className="panel-heading"><div><h2>Estoque</h2><p className="muted">Sessão autenticada para desenvolvimento.</p></div><button className="logout" type="button" onClick={logout}>Sair</button></div>
           <form className="inventory-form" onSubmit={createInventory}>
             <input name="brand" required placeholder="Marca" />
             <input name="name" required placeholder="Modelo" />
@@ -140,6 +182,8 @@ export function App() {
               </article>
             ))}
           </div>
+            </>
+          )}
         </section>
       ) : (
         <>

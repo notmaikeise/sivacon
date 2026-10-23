@@ -65,6 +65,16 @@ Invoke-WebRequest http://localhost:8080/actuator/health
 As migrações são executadas automaticamente na inicialização. Para parar os
 serviços sem remover os dados:
 
+Usuário local de desenvolvimento:
+
+```text
+E-mail: admin@example.com
+Senha: password
+Perfil: ADMIN
+```
+
+Troque essa senha antes de qualquer uso fora do ambiente local.
+
 ```powershell
 docker compose -f infra/docker-compose.yml down
 ```

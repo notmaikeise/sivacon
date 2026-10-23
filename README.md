@@ -106,7 +106,8 @@ estão pendentes.
 As entregas seguirão o planejamento em fatias integradas:
 
 1. **E2 — Estoque e acesso:** CRUD de modelos e unidades, publicação,
-   autenticação, perfis e área inicial do comprador.
+   autenticação, perfis e área inicial do comprador. O login local e a proteção
+   do estoque estão validados; a área do comprador permanece planejada.
 2. **E3 — Jornada comercial:** CRM/funil, propostas versionadas, simulação,
    aprovações e fechamento transacional.
 3. **E4 — Entrega:** testes de jornada, backup/restauração, empacotamento local

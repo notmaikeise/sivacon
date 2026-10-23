@@ -66,6 +66,11 @@ Todos os estados começam em `Não executado`. O card SV22 reúne CT01-CT07 e CT
 
 ## Evidência do checkpoint atual
 
+Além dos testes de catálogo, interesse e estoque, a autenticação local foi
+validada com login válido (`admin@example.com` / `password`) e acesso autenticado
+ao estoque. Sem token, o estoque responde `403`; com token Bearer válido,
+responde `200`.
+
 | Verificação | Resultado |
 | --- | --- |
 | Build backend com Java 21 | Aprovado |
