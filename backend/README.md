@@ -1,7 +1,67 @@
-# Backend
+# SIVACon Backend
 
-Diretório reservado para API Java, regras de negócio, migrações e testes.
+API Spring Boot do SIVACon. O backend usa PostgreSQL como fonte de dados e Flyway
+para aplicar migrações versionadas.
 
-**Situação:** planejamento. Este diretório ainda não contém uma aplicação executável.
+## Organização do código
 
-O card SV09 orienta sua implementação. Consulte [arquitetura](../docs/06-arquitetura.md) e [operação local](../docs/12-operacao-local.md). Registrar comandos reais aqui quando os arquivos de execução existirem.
+O backend segue a separação:
+
+```text
+src/main/java/br/com/sivacon/
+├── catalog/       # controllers e contratos HTTP do catálogo
+├── interest/      # controllers e contratos HTTP de interesse
+├── service/       # regras de negócio, transações e orquestração
+└── dao/           # consultas SQL e persistência PostgreSQL
+```
+
+Controllers não acessam o banco diretamente. Services coordenam o caso de uso
+e DAOs concentram SQL e mapeamento de resultados. Novos módulos devem seguir o
+mesmo padrão, mantendo seus controllers finos.
+
+## Pré-requisitos
+
+- Java 21
+- Docker Desktop com Compose
+
+## Subir PostgreSQL e pgAdmin
+
+Na raiz do repositório:
+
+```powershell
+docker compose -f infra/docker-compose.yml up -d postgres pgadmin
+```
+
+Serviços locais:
+
+| Serviço | Endereço | Credencial de exemplo |
+| --- | --- | --- |
+| PostgreSQL | `localhost:5432` | `sivacon` / `sivacon_dev` |
+| pgAdmin | http://localhost:5050 | `admin@example.com` / `admin_dev` |
+
+No pgAdmin, registre o servidor usando `postgres` como host (não `localhost`,
+porque o pgAdmin roda dentro do Compose), porta `5432`, banco `sivacon`,
+usuário `sivacon` e senha `sivacon_dev`.
+
+## Executar a API
+
+```powershell
+cd backend
+.\mvnw.cmd spring-boot:run
+```
+
+Verificação:
+
+```powershell
+Invoke-WebRequest http://localhost:8080/actuator/health
+```
+
+As migrações são executadas automaticamente na inicialização. Para parar os
+serviços sem remover os dados:
+
+```powershell
+docker compose -f infra/docker-compose.yml down
+```
+
+Para remover também o volume local do PostgreSQL, use `down -v` somente em
+ambiente de desenvolvimento.
