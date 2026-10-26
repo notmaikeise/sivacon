@@ -23,12 +23,21 @@ public class InterestService {
 
     @Transactional
     public UUID create(UUID vehicleId, String name, String email, String phone, String message) {
+        return create(vehicleId, name, email, phone, message, null);
+    }
+
+    @Transactional
+    public UUID create(UUID vehicleId, String name, String email, String phone, String message,
+                       UUID userId) {
         if (!vehicleDao.isPublishedAndAvailable(vehicleId)) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT, "A moto não está disponível para interesse.");
         }
-        var buyerId = UUID.randomUUID();
-        interestDao.insertBuyer(buyerId, name, email, phone);
+        var buyerId = userId == null ? null : interestDao.findBuyerIdByUser(userId);
+        if (buyerId == null) {
+            buyerId = UUID.randomUUID();
+            interestDao.insertBuyer(buyerId, name, email, phone);
+        }
 
         var opportunityId = UUID.randomUUID();
         interestDao.insertOpportunity(opportunityId, buyerId, vehicleId);

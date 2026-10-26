@@ -26,6 +26,12 @@ public class InterestDao {
                 .addValue("phone", phone));
     }
 
+    public UUID findBuyerIdByUser(UUID userId) {
+        return jdbc.query("SELECT id FROM buyer WHERE user_id = :userId",
+                new MapSqlParameterSource("userId", userId),
+                (rs, n) -> rs.getObject("id", UUID.class)).stream().findFirst().orElse(null);
+    }
+
     public void insertOpportunity(UUID id, UUID buyerId, UUID vehicleId) {
         jdbc.update("""
                 INSERT INTO service_opportunity

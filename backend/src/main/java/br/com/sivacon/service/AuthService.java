@@ -8,8 +8,12 @@ import java.util.Base64;
 import java.util.HexFormat;
 import java.util.UUID;
 
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.sivacon.dao.UserDao;
 import br.com.sivacon.dao.UserDao.UserRow;
@@ -42,6 +46,24 @@ public class AuthService {
         var session = dao.findValidSession(hash(token));
         return session == null ? null : new UserPrincipal(session.userId(), session.email(),
                 session.displayName(), session.role());
+    }
+
+    @Transactional
+    public LoginResult registerBuyer(String email, String password, String fullName, String phone) {
+        if (password == null || password.length() < 8) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "A senha deve ter pelo menos 8 caracteres.");
+        }
+        try {
+            var userId = dao.insertUser(email.trim().toLowerCase(), passwordEncoder.encode(password),
+                    fullName.trim(), "BUYER");
+            dao.insertBuyer(UUID.randomUUID(), fullName.trim(), email.trim().toLowerCase(),
+                    phone, userId);
+            return login(email, password);
+        } catch (DuplicateKeyException ex) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Já existe uma conta para este e-mail.");
+        }
     }
 
     private String hash(String token) {

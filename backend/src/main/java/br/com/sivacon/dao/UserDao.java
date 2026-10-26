@@ -25,6 +25,25 @@ public class UserDao {
                         rs.getString("role"))).stream().findFirst().orElse(null);
     }
 
+    public UUID insertUser(String email, String passwordHash, String displayName, String role) {
+        var id = UUID.randomUUID();
+        jdbc.update("""
+                INSERT INTO app_user (id, email, password_hash, display_name, role)
+                VALUES (:id, :email, :passwordHash, :displayName, :role)
+                """, new MapSqlParameterSource().addValue("id", id).addValue("email", email)
+                .addValue("passwordHash", passwordHash).addValue("displayName", displayName)
+                .addValue("role", role));
+        return id;
+    }
+
+    public void insertBuyer(UUID id, String fullName, String email, String phone, UUID userId) {
+        jdbc.update("""
+                INSERT INTO buyer (id, full_name, email, phone, user_id)
+                VALUES (:id, :fullName, :email, :phone, :userId)
+                """, new MapSqlParameterSource().addValue("id", id).addValue("fullName", fullName)
+                .addValue("email", email).addValue("phone", phone).addValue("userId", userId));
+    }
+
     public void createSession(UUID userId, String tokenHash, java.time.Instant expiresAt) {
         jdbc.update("""
                 INSERT INTO app_session (user_id, token_hash, expires_at)
