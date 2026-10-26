@@ -47,11 +47,23 @@ rota fora do ambiente de teste.
 
 ## Autenticação (checkpoint E2)
 
-`POST /api/v1/auth/login` recebe `email` e `password` e retorna um token de
+`POST /api/v1/auth/register` cria uma conta de comprador (`fullName`, `email`,
+`password` e `phone` opcional) e já inicia a sessão. `POST /api/v1/auth/login` recebe `email` e `password` e retorna um token de
 sessão com validade de oito horas, além do perfil do usuário. Envie o token em
 `Authorization: Bearer <token>` para acessar o estoque. O catálogo e o registro
 de interesse continuam públicos. O usuário `admin@example.com` com senha
 `password` existe apenas para desenvolvimento local.
+
+Contas autenticadas de comprador acessam `GET /api/v1/me`, que retorna o perfil,
+atendimentos, propostas e compras somente do titular. Também existem as consultas
+independentes `/api/v1/me/interests`, `/api/v1/me/proposals` e
+`/api/v1/me/purchases`; todas exigem o papel `BUYER` e filtram pelo usuário da
+sessão, nunca por um identificador recebido pela URL.
+
+O catálogo aceita também `minPrice`, `condition` e `category`. A listagem mantém
+somente unidades publicadas e disponíveis; o detalhe de uma unidade publicada
+retorna o campo `available`, inclusive quando ela está temporariamente
+indisponível.
 
 ## Conteúdo de cada operação
 
