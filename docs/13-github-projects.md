@@ -103,7 +103,7 @@ Salvar cada vista após configurar. Cards sem Escopo ainda preenchido não apare
 
 ## Criar issues a partir dos cards
 
-1. Abrir [backlog/README.md](backlog/README.md) e escolher o card.
+1. Escolher o card no planejamento e registrar sua issue.
 2. Em `Issues → New issue`, usar o template adequado.
 3. Copiar título sem o `#` Markdown e substituir o corpo do template pelo corpo completo do card.
 4. Definir labels e assignee com base na equipe.

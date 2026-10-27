@@ -1,7 +1,8 @@
 # API e integração
 
-**Estado:** contrato incremental. O primeiro endpoint público de catálogo está
-implementado; as demais famílias continuam sendo adicionadas por fatias.
+**Estado:** contrato incremental. Catálogo, interesses, estoque,
+autenticação e área do comprador estão implementados até E2; CRM, propostas,
+simulação e venda continuam planejados para E3.
 
 ## Famílias previstas
 
@@ -33,7 +34,7 @@ está publicada.
 exige `vehicleId`, `name`, `email` e `message`, com `phone` opcional. A API
 retorna `409` quando a unidade não está publicada ou disponível.
 
-## Estoque (checkpoint E2)
+## Estoque (E2)
 
 - `GET /api/v1/inventory` lista unidades e seus estados para a área interna.
 - `POST /api/v1/inventory` cadastra modelo/unidade como `DRAFT`.
@@ -41,11 +42,11 @@ retorna `409` quando a unidade não está publicada ou disponível.
   catálogo. A publicação muda o estado para `AVAILABLE`; retirar muda para
   `DRAFT`.
 
-O endpoint de estoque ainda é uma superfície local de desenvolvimento. A
-autenticação e a matriz de perfis devem ser implementadas antes de expor essa
-rota fora do ambiente de teste.
+O endpoint de estoque exige autenticação e os perfis `ADMIN`, `MANAGER` ou
+`STOCK`. Ele continua destinado ao ambiente local até a revisão da matriz final
+de permissões.
 
-## Autenticação (checkpoint E2)
+## Autenticação (E2)
 
 `POST /api/v1/auth/register` cria uma conta de comprador (`fullName`, `email`,
 `password` e `phone` opcional) e já inicia a sessão. `POST /api/v1/auth/login` recebe `email` e `password` e retorna um token de
@@ -87,4 +88,5 @@ O servidor valida autenticação, perfil e titularidade. Ocultar botão ou prote
 
 ## Arquivos do contrato
 
-O caminho concreto do OpenAPI e das coleções locais será registrado quando criado em SV08. Não há arquivos OpenAPI nem Swagger funcionando neste pacote.
+O caminho concreto do OpenAPI e das coleções locais será registrado quando
+criado em SV08. Não há arquivos OpenAPI nem Swagger funcionando neste pacote.

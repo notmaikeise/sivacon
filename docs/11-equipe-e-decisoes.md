@@ -55,6 +55,6 @@ Rever entregas, bloqueios e prioridades; resolver uma lista concreta de dúvidas
 | Proposta inicial | Visão das três áreas, jornada, ferramentas e tarefas de planejamento. |
 | Plano de modelagem local | RF/RNF, regras, premissas, restrições, riscos e validação; consolidação da entrega local. |
 | Kit do repositório | Organização em Markdown, templates e cards rastreáveis, preparada com apoio de IA. |
-| Próximo marco | Revisão humana da linha de base e registro das decisões pela equipe. |
+| Incremento E2 | Catálogo, estoque, autenticação e área do comprador implementados; revisão humana e decisões comerciais da E3 continuam pendentes. |
 
 Este histórico descreve a organização dos materiais disponíveis. Não afirma que código, testes ou aprovação da professora já ocorreram.
