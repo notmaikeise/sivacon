@@ -8,12 +8,14 @@ Incremental e iterativo: elicitar, analisar, modelar, implementar, verificar e i
 | --- | --- | --- | --- |
 | E0 - Alinhamento | PDFs, contexto e exigências da disciplina. | Equipe aceita escopo, atores, papéis e regras necessárias. | SV01-SV04 |
 | E1 - Projeto | Requisitos priorizados, riscos e políticas. | Telas, dados, arquitetura e contrato; fluxo mínimo integrado. | SV05-SV10; SV29 opcional |
-| E2 - Catálogo e acesso | Modelos e ambiente. | Estoque, vitrine, contas, interesses e área inicial; CT01-CT03. | SV11-SV15 |
+| E2 - Catálogo e acesso | Modelos e ambiente. | Estoque, vitrine, contas, interesses e área do comprador; CT01-CT03. | SV11-SV15 |
 | E3 - Jornada comercial | Catálogo, contas e regras comerciais. | Atendimento, proposta, simulação, aprovação e venda; CT04-CT07. | SV16-SV23 |
 | E4 - Entrega | Incremento integrado e evidências. | Pacote local, manual, backup restaurado e demonstração. | SV24-SV28 |
 | E5 - Evolução | MVP aceito e nova prioridade. | Segunda instalação, busca e extras com critérios próprios. | SV30-SV32 |
 
-Não há datas inventadas. Confirmar prazo e disponibilidade em SV02 antes de montar calendário ou preencher milestones.
+E2 está implementada na branch `feature/area-comprador`. Não há datas
+inventadas; confirmar prazo e disponibilidade em SV02 antes de montar
+calendário ou preencher milestones.
 
 ## Premissas da fonte
 

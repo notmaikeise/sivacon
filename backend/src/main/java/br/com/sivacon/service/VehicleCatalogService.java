@@ -18,6 +18,11 @@ public class VehicleCatalogService {
         this.dao = dao;
     }
 
+    public List<VehicleRow> list(String brand, BigDecimal minPrice, BigDecimal maxPrice,
+                                 String condition, String category) {
+        return dao.findPublishedAvailable(brand, minPrice, maxPrice, condition, category);
+    }
+
     public List<VehicleRow> list(String brand, BigDecimal maxPrice) {
         return dao.findPublishedAvailable(brand, maxPrice);
     }

@@ -29,8 +29,12 @@ public class VehicleCatalogController {
     @GetMapping
     public List<VehicleSummary> list(
             @RequestParam(required = false) String brand,
-            @RequestParam(required = false) BigDecimal maxPrice) {
-        return service.list(brand, maxPrice).stream().map(VehicleCatalogController::toSummary).toList();
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) String condition,
+            @RequestParam(required = false) String category) {
+        return service.list(brand, minPrice, maxPrice, condition, category).stream()
+                .map(VehicleCatalogController::toSummary).toList();
     }
 
     @GetMapping("/{id}")
@@ -41,11 +45,13 @@ public class VehicleCatalogController {
     }
 
     private static VehicleSummary toSummary(VehicleRow row) {
-        return new VehicleSummary(row.id(), row.brand(), row.name(), row.price(),
-                row.condition(), row.status(), row.description());
+        return new VehicleSummary(row.id(), row.brand(), row.name(), row.engine(), row.category(),
+                row.price(), row.condition(), row.status(), row.published(),
+                row.published() && "AVAILABLE".equals(row.status()), row.description());
     }
 
-    public record VehicleSummary(UUID id, String brand, String name, BigDecimal price,
-                                 String condition, String status, String description) {
+    public record VehicleSummary(UUID id, String brand, String name, String engine, String category,
+                                 BigDecimal price, String condition, String status, boolean published,
+                                 boolean available, String description) {
     }
 }

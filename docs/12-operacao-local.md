@@ -1,8 +1,7 @@
 # Operação local
 
-**Estado:** manual incremental. PostgreSQL, pgAdmin, backend e frontend já
-possuem execução local documentada; backup, restauração e instalação em outra
-máquina continuam pendentes.
+**Estado:** manual de instalação e execução local do incremento E2. Backup,
+restauração e instalação em outra máquina continuam pendentes para E4.
 
 ## Diretriz
 
@@ -18,7 +17,7 @@ Executar com equipamento, rede, energia e armazenamento já disponíveis. Não c
 
 `localhost` em outro computador aponta para esse outro computador. Para LAN, definir HTTPS confiável nos dispositivos e firewall. Não expor PostgreSQL ou API diretamente como requisito da demonstração.
 
-## Pacote disponível no checkpoint
+## Pacote disponível no incremento E2
 
 Frontend compilável; backend; configuração local; PostgreSQL e pgAdmin em
 volumes persistentes; dados fictícios; versões das ferramentas e comandos de
@@ -42,7 +41,37 @@ Publicar a entrada web e encaminhar API pela rede interna aprovada. Senhas, cert
 
 Guardar backup em outro dispositivo já disponível. Um volume persistente não é backup; cópia no mesmo disco não protege contra perda desse disco.
 
-## Verificação do checkpoint
+## Instalação, execução e testes
+
+Na raiz do repositório:
+
+```powershell
+docker compose -f infra/docker-compose.yml up -d postgres pgadmin
+cd backend
+.\mvnw.cmd test
+.\mvnw.cmd spring-boot:run
+```
+
+Em outro terminal:
+
+```powershell
+cd frontend
+npm install
+npm run build
+npm run dev
+```
+
+Acesse `http://localhost:5173`. A API fica em `http://localhost:8080` e o
+health check está em `/actuator/health`. Para parar os serviços:
+
+```powershell
+docker compose -f infra/docker-compose.yml down
+```
+
+O banco e o pgAdmin usam volumes persistentes. Não use `down -v` se quiser
+preservar os dados locais.
+
+## Verificação do incremento E2
 
 Já verificado:
 
@@ -50,10 +79,15 @@ Já verificado:
 - PostgreSQL saudável em `localhost:5432`;
 - pgAdmin acessível em `http://localhost:5050`;
 - migrações Flyway aplicadas;
-- `.\mvnw.cmd -DskipTests package` com Java 21;
+- `.\mvnw.cmd test` com Java 21 (7 testes aprovados);
 - `npm run build`;
 - catálogo e registro de interesse via API.
+- autenticação local e proteção do estoque por perfil;
+- área do comprador filtrada pela identidade da sessão.
 
 ## Verificação futura
 
-SV25 comprova backup/restauração. SV27 troca este roteiro por instruções reais e revisadas. CT08 exige instalação por outra pessoa com o manual, dados após reinício e restauração de teste. Não marcar esses itens como concluídos apenas por criar os documentos.
+SV25 comprova backup/restauração. SV27 revisa e amplia este roteiro com as
+instruções da máquina de entrega. CT08 exige instalação por outra pessoa com o
+manual, dados após reinício e restauração de teste. Não marcar esses itens como
+concluídos apenas por criar os documentos.

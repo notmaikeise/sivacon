@@ -1,6 +1,8 @@
 # Modelo conceitual de dados
 
-**Estado:** proposta. Este documento não é um esquema SQL nem um conjunto de entidades já implementadas. Elaborar e aprovar o modelo lógico em SV05.
+**Estado:** modelo conceitual e esquema SQL parcialmente implementados. O
+núcleo de E2 está versionado nas migrações Flyway V1 a V5; o modelo lógico e
+as regras comerciais completas ainda precisam de aprovação antes da E3.
 
 ## Núcleo conceitual
 
@@ -39,6 +41,14 @@ Cada proposta tem exatamente um comprador e uma unidade. Um comprador e uma unid
 - Definir o conjunto de estados da unidade e da proposta antes de mapear transições.
 - Garantir RN01, RN02 e RN03 também por integridade no banco, conforme o modelo aprovado.
 - Definir concorrência e transação do fechamento; não confiar apenas em “consultar disponível” antes de gravar.
+
+## Estado do esquema atual
+
+O banco já possui tabelas para loja, usuários, compradores, veículos,
+interesses, propostas, versões, vendas, parcelas simuladas e auditoria. E2 usa
+efetivamente usuários, compradores, veículos e oportunidades para catálogo,
+estoque, autenticação e área do comprador. Propostas, parcelas e vendas estão
+preparadas no esquema, mas ainda não possuem casos de uso completos na API.
 
 ## Entregas de SV05
 

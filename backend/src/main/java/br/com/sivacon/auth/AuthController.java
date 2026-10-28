@@ -3,6 +3,7 @@ package br.com.sivacon.auth;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,7 +35,19 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/register")
+    public AuthResponse register(@Valid @RequestBody RegisterRequest request) {
+        var result = service.registerBuyer(request.email(), request.password(), request.fullName(),
+                request.phone());
+        return new AuthResponse(result.token(), result.expiresAt(), result.email(),
+                result.displayName(), result.role());
+    }
+
     public record LoginRequest(@NotBlank @Email String email, @NotBlank String password) {}
+    public record RegisterRequest(@NotBlank @Email String email,
+                                  @NotBlank @Size(min = 8, max = 72) String password,
+                                  @NotBlank @Size(max = 160) String fullName,
+                                  @Size(max = 32) String phone) {}
     public record AuthResponse(String token, java.time.Instant expiresAt, String email,
                                String displayName, String role) {}
 }

@@ -1,7 +1,8 @@
 # SIVACon Backend
 
 API Spring Boot do SIVACon. O backend usa PostgreSQL como fonte de dados e Flyway
-para aplicar migrações versionadas.
+para aplicar migrações versionadas. O incremento E2 inclui catálogo, estoque,
+autenticação, interesses e área do comprador.
 
 ## Organização do código
 
@@ -9,8 +10,12 @@ O backend segue a separação:
 
 ```text
 src/main/java/br/com/sivacon/
+├── auth/          # cadastro e login
+├── buyer/         # área autenticada do comprador
 ├── catalog/       # controllers e contratos HTTP do catálogo
-├── interest/      # controllers e contratos HTTP de interesse
+├── interest/      # registro de interesse
+├── inventory/     # estoque e publicação
+├── security/      # filtro de token e configuração de acesso
 ├── service/       # regras de negócio, transações e orquestração
 └── dao/           # consultas SQL e persistência PostgreSQL
 ```
@@ -24,6 +29,9 @@ Testes unitários dos services:
 ```powershell
 .\mvnw.cmd test
 ```
+
+O build atual possui sete testes unitários aprovados. Testes HTTP e de
+integração com PostgreSQL serão adicionados nas próximas fatias.
 
 ## Pré-requisitos
 

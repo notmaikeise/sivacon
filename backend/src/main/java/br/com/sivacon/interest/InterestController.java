@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import br.com.sivacon.service.AuthService.UserPrincipal;
 import br.com.sivacon.service.InterestService;
 
 @RestController
@@ -27,9 +29,12 @@ public class InterestController {
     }
 
     @PostMapping
-    public InterestResponse create(@Valid @RequestBody InterestRequest request) {
+    public InterestResponse create(@Valid @RequestBody InterestRequest request,
+                                   Authentication authentication) {
+        var principal = authentication != null && authentication.getPrincipal() instanceof UserPrincipal p
+                && "BUYER".equals(p.role()) ? (UserPrincipal) authentication.getPrincipal() : null;
         var opportunityId = service.create(request.vehicleId(), request.name(), request.email(),
-                request.phone(), request.message());
+                request.phone(), request.message(), principal == null ? null : principal.id());
         return new InterestResponse(opportunityId, "Interesse registrado com sucesso.");
     }
 
